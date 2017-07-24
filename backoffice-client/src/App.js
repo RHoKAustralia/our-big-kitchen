@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Events from './events';
 import Home from './home';
 import Login from './login';
-import { firebase } from './firebase/init.js';
+import { firebase, base } from './firebase/init';
 
 class App extends Component {
 	constructor(props) {
@@ -19,10 +18,22 @@ class App extends Component {
 	componentDidMount() {
 		firebase.auth().onAuthStateChanged(user => {
 			this.setState({ loading: false, user });
+
+			if (this.syncRef) {
+				base.removeBinding(this.syncRef);
+			}
+
+			if (user.uid) {
+				this.syncRef = base.syncState(`users/${user.uid}/profile`, {
+					context: this,
+					state: 'userProfile',
+				});
+			}
 		});
 	}
 
 	render() {
+		console.log(this.state.userProfile);
 		return (
 			<BrowserRouter>
 				<div className="App">
@@ -31,14 +42,16 @@ class App extends Component {
 					</div>
 
 					{this.state.loading && <div>Loading...</div>}
-					{!this.state.loading &&
-						this.state.user &&
-						<div>
-							<Route exact path="/" component={Home} />
-							<Route path="/events" component={Events} />
-						</div>}
-
 					{!this.state.loading && !this.state.user && <div><Login /></div>}
+					{!this.state.loading &&
+						this.state.userProfile &&
+						(this.state.userProfile.isAdmin
+							? <div>
+									<Route exact path="/" component={Home} />
+									<Route path="/events" component={Events} />
+								</div>
+							: <div>You are logged in but not an admin! Get someone to give you admin powers!</div>)}
+
 				</div>
 			</BrowserRouter>
 		);

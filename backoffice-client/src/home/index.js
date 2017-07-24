@@ -6,7 +6,10 @@ export default function Home(props) {
 	return (
 		<div>
 			<h1>Home</h1>
-			<Link to="/events">Events</Link>
+			<ul>
+				<li><Link to="/events">Users</Link></li>
+				<li><Link to="/events">Events</Link></li>
+			</ul>
 		</div>
 	);
 }
