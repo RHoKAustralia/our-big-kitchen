@@ -7,8 +7,8 @@ export default function Home(props) {
 		<div>
 			<h1>Home</h1>
 			<ul>
-				<li><Link to="/events">Users</Link></li>
 				<li><Link to="/events">Events</Link></li>
+				<li><Link to="/users">Users</Link></li>
 			</ul>
 		</div>
 	);

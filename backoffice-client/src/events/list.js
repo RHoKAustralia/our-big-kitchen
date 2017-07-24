@@ -40,6 +40,7 @@ export default withRouter(
 		render() {
 			return (
 				<div>
+					<Link to="/">Back</Link>
 					{this.state.error && <div>{this.state.error.message}</div>}
 					<table>
 						<thead>

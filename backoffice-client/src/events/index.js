@@ -10,7 +10,6 @@ export default class EventsIndex extends React.Component {
 	render() {
 		return (
 			<div>
-				<Link to="/">Back</Link>
 				<h1>Events</h1>
 				<Route exact path={`${this.props.match.url}`} component={ListEvents} />
 				<Route path={`${this.props.match.url}/add`} component={EditEvent} />

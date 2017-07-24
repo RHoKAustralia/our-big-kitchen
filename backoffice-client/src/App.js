@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Events from './events';
 import Home from './home';
 import Login from './login';
+import Users from './users';
 import { firebase, base } from './firebase/init';
 
 class App extends Component {
@@ -49,6 +50,7 @@ class App extends Component {
 							? <div>
 									<Route exact path="/" component={Home} />
 									<Route path="/events" component={Events} />
+									<Route path="/users" component={Users} />
 								</div>
 							: <div>You are logged in but not an admin! Get someone to give you admin powers!</div>)}
 

@@ -21,10 +21,6 @@ export default withRouter(
 		onChange(key, event) {
 			const newValue = event.target.value;
 
-			console.log({
-				[key]: newValue,
-			});
-
 			this.setState(state => ({
 				event: {
 					...state.event,
