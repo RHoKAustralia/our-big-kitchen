@@ -34,7 +34,6 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.state.userProfile);
 		return (
 			<BrowserRouter>
 				<div className="App">

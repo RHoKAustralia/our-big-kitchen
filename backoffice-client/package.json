@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "firebaseui": "^2.2.1",
+    "moment": "^2.18.1",
     "re-base": "^3.0.3",
     "react": "^15.6.1",
+    "react-datetime": "^2.9.0",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1",
     "react-scripts": "1.0.10"

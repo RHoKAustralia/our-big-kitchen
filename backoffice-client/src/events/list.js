@@ -1,9 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 
 import { Route, Link } from 'react-router-dom';
-
 import { base } from '../firebase/init';
 import { withRouter } from 'react-router-dom';
+
+const format = 'DD/MM/YYYY h:mma';
 
 export default withRouter(
 	class ListEvents extends React.Component {
@@ -14,11 +16,19 @@ export default withRouter(
 		}
 
 		componentDidMount() {
-			base.bindToState('opportunities', {
+			base.listenTo('opportunities', {
 				context: this,
-				state: 'events',
 				asArray: true,
 				keepKeys: true,
+				then: data => {
+					this.setState({
+						events: data.map(event => ({
+							...event,
+							start: moment(event.start),
+							finish: moment(event.finish),
+						})),
+					});
+				},
 			});
 		}
 
@@ -61,8 +71,8 @@ export default withRouter(
 									<td>{event.title}</td>
 									<td>{event.description}</td>
 									<td>{event.event_type}</td>
-									<td>{event.start}</td>
-									<td>{event.finish}</td>
+									<td>{event.start.format(format)}</td>
+									<td>{event.finish.format(format)}</td>
 									<td>{event.spots_left}</td>
 									<td>{event.max_volunteers}</td>
 									<td>

@@ -1,4 +1,7 @@
 import React from 'react';
+import DateTimePicker from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import moment from 'moment';
 
 import { base } from '../firebase/init';
 import { withRouter, Link } from 'react-router-dom';
@@ -15,18 +18,28 @@ export default withRouter(
 			base.fetch(`opportunities/${this.props.match.params.id}`, {
 				context: this,
 				then: data => {
-					this.setState({ event: data });
+					this.setState({
+						event: {
+							...data,
+							start: moment(data.start),
+							finish: moment(data.finish),
+						},
+					});
 				},
 			});
 		}
 
-		onChange(key, event) {
+		onChangeEvent(key, event) {
 			const newValue = event.target.value;
 
+			this.onChange(key, newValue);
+		}
+
+		onChange(key, value) {
 			this.setState(state => ({
 				event: {
 					...state.event,
-					[key]: newValue,
+					[key]: value,
 				},
 			}));
 		}
@@ -48,10 +61,17 @@ export default withRouter(
 
 		onSave(event) {
 			event.preventDefault();
+			const stateEvent = this.state.event;
+
+			const format = 'YYYY-MM-DDTHH:mm:ssZZ';
 
 			base
 				.update(`opportunities/${this.props.match.params.id}`, {
-					data: { ...this.state.event },
+					data: {
+						...stateEvent,
+						start: stateEvent.start.format(format),
+						finish: stateEvent.finish.format(format),
+					},
 				})
 				.then(() => {
 					this.props.history.push('/events');
@@ -72,41 +92,47 @@ export default withRouter(
 						{this.state.error && <div>Error: {this.state.error.message}</div>}
 						<div>
 							<label>
-								Title: <input type="text" value={event.title} onChange={this.onChange.bind(this, 'title')} />
+								Title: <input type="text" value={event.title} onChange={this.onChangeEvent.bind(this, 'title')} />
 							</label>
 						</div>
 						<div>
 							<label>
-								Description:{' '}
-								<input type="text" value={event.description} onChange={this.onChange.bind(this, 'description')} />
+								Description:{' '}<br />
+								<textarea value={event.description} onChange={this.onChangeEvent.bind(this, 'description')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								Event Type:{' '}
-								<input type="text" value={event.event_type} onChange={this.onChange.bind(this, 'event_type')} />
+								<input type="text" value={event.event_type} onChange={this.onChangeEvent.bind(this, 'event_type')} />
 							</label>
 						</div>
 						<div>
 							<label>
-								Start: <input type="text" value={event.start} onChange={this.onChange.bind(this, 'start')} />
+								Start:{' '}
+								<DateTimePicker value={event.start} onChange={this.onChange.bind(this, 'start')} />
 							</label>
 						</div>
 						<div>
 							<label>
-								End: <input type="text" value={event.finish} onChange={this.onChange.bind(this, 'finish')} />
+								End:{' '}
+								<DateTimePicker value={event.finish} onChange={this.onChange.bind(this, 'finish')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								Spots Left:{' '}
-								<input type="text" value={event.spots_left} onChange={this.onChange.bind(this, 'spots_left')} />
+								<input type="text" value={event.spots_left} onChange={this.onChangeEvent.bind(this, 'spots_left')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								Max Volunteers:{' '}
-								<input type="text" value={event.max_volunteers} onChange={this.onChange.bind(this, 'max_volunteers')} />
+								<input
+									type="text"
+									value={event.max_volunteers}
+									onChange={this.onChangeEvent.bind(this, 'max_volunteers')}
+								/>
 							</label>
 						</div>
 						<button onClick={this.onDelete.bind(this)}>Delete</button>{' '}
