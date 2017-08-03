@@ -12,13 +12,23 @@ export default withRouter(
 		}
 
 		componentDidMount() {
-			base.syncState(`users/${this.props.match.params.id}/profile`, {
-				context: this,
-				state: 'profile',
-			});
+			base
+				.fetch(`users/${this.props.match.params.id}/profile`, {
+					context: this,
+				})
+				.then(data => {
+					this.setState({ profile: data });
+				})
+				.catch(error => {
+					this.setState({
+						error,
+					});
+				});
 		}
 
 		onChange(key, newValue) {
+			console.log(newValue);
+
 			this.setState(state => ({
 				profile: {
 					...state.profile,
@@ -39,40 +49,58 @@ export default withRouter(
 			this.onChange(key, newValue);
 		}
 
+		onSave(event) {
+			event.preventDefault();
+
+			base
+				.update(`users/${this.props.match.params.id}/profile`, {
+					data: { ...this.state.profile },
+				})
+				.then(() => {
+					this.props.history.push('/users');
+				})
+				.catch(error => {
+					this.setState({
+						error,
+					});
+				});
+		}
+
 		render() {
 			const profile = this.state.profile;
 
 			return profile
 				? <div>
 						{this.state.error && <div>Error: {this.state.error.message}</div>}
+						<Link to="/users">Back</Link>
 						<div>
 							<label>
 								Display Name:{' '}
-								<input type="text" value={profile.displayName} onChange={this.onChange.bind(this, 'displayName')} />
+								<input type="text" value={profile.displayName} onChange={this.onTextboxChange.bind(this, 'displayName')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								Email:{' '}
-								<input type="text" value={profile.email} onChange={this.onChange.bind(this, 'email')} />
+								<input type="text" value={profile.email} onChange={this.onTextboxChange.bind(this, 'email')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								Mobile:{' '}
-								<input type="text" value={profile.mobile} onChange={this.onChange.bind(this, 'mobile')} />
+								<input type="text" value={profile.mobile} onChange={this.onTextboxChange.bind(this, 'mobile')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								D.O.B.:{' '}
-								<input type="text" value={profile.dob} onChange={this.onChange.bind(this, 'dob')} />
+								<input type="text" value={profile.dob} onChange={this.onTextboxChange.bind(this, 'dob')} />
 							</label>
 						</div>
 						<div>
 							<label>
 								WWCN:{' '}
-								<input type="text" value={profile.wwcn} onChange={this.onChange.bind(this, 'wwcn')} />
+								<input type="text" value={profile.wwcn} onChange={this.onTextboxChange.bind(this, 'wwcn')} />
 							</label>
 						</div>
 						<div>
@@ -95,7 +123,7 @@ export default withRouter(
 								/>
 							</label>
 						</div>
-						<Link to="/users">Back</Link>
+						<button onClick={this.onSave.bind(this)}>Save</button>
 					</div>
 				: <div>Loading...</div>;
 		}

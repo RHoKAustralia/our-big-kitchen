@@ -45,11 +45,11 @@ export default withRouter(
 					<table>
 						<thead>
 							<tr>
-								<td>Display Name</td>
-								<td>Email</td>
-								<td>Admin</td>
-								<td>Super Admin</td>
-								<td />
+								<th>Display Name</th>
+								<th>Email</th>
+								<th>Admin</th>
+								<th>Super Admin</th>
+								<th />
 							</tr>
 						</thead>
 						<tbody>

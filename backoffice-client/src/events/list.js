@@ -45,14 +45,14 @@ export default withRouter(
 					<table>
 						<thead>
 							<tr>
-								<td>Title</td>
-								<td>Description</td>
-								<td>Type</td>
-								<td>Start</td>
-								<td>End</td>
-								<td>Spots Left</td>
-								<td>Max Volunteers</td>
-								<td />
+								<th>Title</th>
+								<th>Description</th>
+								<th>Type</th>
+								<th>Start</th>
+								<th>End</th>
+								<th>Spots Left</th>
+								<th>Max Volunteers</th>
+								<th />
 							</tr>
 						</thead>
 						<tbody>
@@ -62,7 +62,7 @@ export default withRouter(
 									<td>{event.description}</td>
 									<td>{event.event_type}</td>
 									<td>{event.start}</td>
-									<td>{event.end}</td>
+									<td>{event.finish}</td>
 									<td>{event.spots_left}</td>
 									<td>{event.max_volunteers}</td>
 									<td>

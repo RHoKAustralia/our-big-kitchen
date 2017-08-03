@@ -12,9 +12,11 @@ export default withRouter(
 		}
 
 		componentDidMount() {
-			base.syncState(`opportunities/${this.props.match.params.id}`, {
+			base.fetch(`opportunities/${this.props.match.params.id}`, {
 				context: this,
-				state: 'event',
+				then: data => {
+					this.setState({ event: data });
+				},
 			});
 		}
 
@@ -30,9 +32,30 @@ export default withRouter(
 		}
 
 		onDelete(event) {
+			event.preventDefault();
+
+			if (window.confirm(`Are you sure you want to delete ${this.state.event.title}?`)) {
+				base
+					.remove(`opportunities/${this.props.match.params.id}`)
+					.then(result => this.props.history.push('/events'))
+					.catch(error => {
+						this.setState({
+							error,
+						});
+					});
+			}
+		}
+
+		onSave(event) {
+			event.preventDefault();
+
 			base
-				.remove(`opportunities/${this.props.match.params.id}`)
-				.then(result => this.props.history.push('/events'))
+				.update(`opportunities/${this.props.match.params.id}`, {
+					data: { ...this.state.event },
+				})
+				.then(() => {
+					this.props.history.push('/events');
+				})
 				.catch(error => {
 					this.setState({
 						error,
@@ -45,6 +68,7 @@ export default withRouter(
 
 			return event
 				? <div>
+						<Link to="/events">Back</Link>
 						{this.state.error && <div>Error: {this.state.error.message}</div>}
 						<div>
 							<label>
@@ -85,8 +109,8 @@ export default withRouter(
 								<input type="text" value={event.max_volunteers} onChange={this.onChange.bind(this, 'max_volunteers')} />
 							</label>
 						</div>
-						<button onClick={this.onDelete.bind(this)}>Delete</button>
-						<Link to="/events">Back</Link>
+						<button onClick={this.onDelete.bind(this)}>Delete</button>{' '}
+						<button onClick={this.onSave.bind(this)}>Save</button>
 					</div>
 				: <div>Loading...</div>;
 		}
