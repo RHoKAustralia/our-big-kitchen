@@ -3,7 +3,7 @@
     "rules": "database.rules.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "backoffice-client/build",
     "rewrites": [
       {
         "source": "**",
