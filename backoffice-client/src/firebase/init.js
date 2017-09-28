@@ -1,6 +1,6 @@
 var Rebase = require('re-base');
 var firebase = require('firebase');
-var app = process.env.NODE_ENV === 'development'
+var app = false //process.env.NODE_ENV === 'development'
 	? firebase.initializeApp({
 			apiKey: 'AIzaSyCZBVjOVYUF8YGLdsr7Tp7JEXYGZwiCqbo',
 			authDomain: 'obk-dev.firebaseapp.com',

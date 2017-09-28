@@ -24,7 +24,7 @@ class App extends Component {
 				base.removeBinding(this.syncRef);
 			}
 
-			if (user.uid) {
+			if (user && user.uid) {
 				this.syncRef = base.syncState(`users/${user.uid}/profile`, {
 					context: this,
 					state: 'userProfile',
