@@ -11,7 +11,9 @@ export default withRouter(
     constructor(props) {
       super(props);
 
-      this.state = {};
+      this.state = {
+        eventTypes: ['Birthday', 'Challa Bake', 'Corporate', 'Function', 'Internal', 'School']
+      };
     }
 
     componentDidMount() {
@@ -90,6 +92,15 @@ export default withRouter(
     render() {
       const event = this.state.event;
 
+      var self = this;
+      var eventTypeOptions = this.state.eventTypes.map(function(option) {
+        return (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        )
+      });
+
       return event ? (
         <div>
           <Link to={`/events/${this.props.match.params.id}`}>Back</Link>
@@ -116,11 +127,11 @@ export default withRouter(
           <div>
             <label>
               Event Type:{" "}
-              <input
-                type="text"
+              <select
                 value={event.event_type}
-                onChange={this.onChangeEvent.bind(this, "event_type")}
-              />
+                onChange={this.onChangeEvent.bind(this, "event_type")}>
+                {eventTypeOptions}
+              </select>
             </label>
           </div>
           <div>

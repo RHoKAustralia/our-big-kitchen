@@ -10,7 +10,7 @@ export default class UsersIndex extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1>Users</h1>
+				<h2>Users</h2>
 				<Route exact path={`${this.props.match.url}`} component={ListUsers} />
 				<Route path={`${this.props.match.url}/:id`} component={EditUser} />
 			</div>
